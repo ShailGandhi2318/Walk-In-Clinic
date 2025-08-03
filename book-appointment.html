@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Appointment - GreenLeaf Clinic</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="logo">GreenLeaf Clinic</div>
+      <nav class="nav">
+        <div class="nav-links">
+          <a href="index.html#about">About</a>
+          <a href="index.html#services">Services</a>
+          <a href="index.html#doctors">Doctors</a>
+          <a href="appointment-dashboard.html" class="book-icon" title="My Appointments">📅 My Appointments</a>
+        </div>
+        <div class="nav-login">
+          <span class="user-greeting">Welcome, <span id="user-name">Patient</span>!</span>
+          <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <section class="appointment-section">
+    <div class="appointment-container">
+      <h2>Book New Appointment</h2>
+      <p class="appointment-subtitle">Schedule your visit with one of our experienced doctors</p>
+      
+      <!-- Existing Appointments Warning -->
+      <div id="existing-appointments-notice" style="display: none; background: linear-gradient(135deg, #fff3e0, #ffe0b2); border: 2px solid #ff9800; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem;">
+        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+          <div style="font-size: 1.5rem; flex-shrink: 0;">⚠️</div>
+          <div>
+            <strong style="color: #e65100; display: block; margin-bottom: 0.5rem;">You have existing appointments</strong>
+            <p style="color: #bf360c; margin-bottom: 1rem; line-height: 1.4;">Please check for conflicts with your existing appointments to avoid double-booking.</p>
+            <a href="appointment-dashboard.html" style="background: #ff9800; color: white; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-weight: 600; font-size: 0.9rem;">View My Appointments</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="appointment-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="doctor-select">Select Doctor<span>*</span></label>
+            <select id="doctor-select" required>
+              <option value="" disabled selected>Choose your preferred doctor</option>
+              <option value="dr-jane-smith">Dr. Jane Smith - General Practitioner</option>
+              <option value="dr-michael-lee">Dr. Michael Lee - Family Medicine</option>
+              <option value="dr-sarah-khan">Dr. Sarah Khan - Pediatrician</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="visit-type">Visit Type<span>*</span></label>
+            <select id="visit-type" required>
+              <option value="" disabled selected>Select visit type</option>
+              <option value="routine-checkup">Routine Checkup</option>
+              <option value="follow-up">Follow-up Visit</option>
+              <option value="consultation">New Consultation</option>
+              <option value="vaccination">Vaccination</option>
+              <option value="chronic-care">Chronic Disease Management</option>
+              <option value="pediatric">Pediatric Care</option>
+              <option value="womens-health">Women's Health</option>
+              <option value="travel-medicine">Travel Medicine</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="appointment-date">Preferred Date<span>*</span></label>
+            <input type="date" id="appointment-date" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="appointment-time">Preferred Time<span>*</span></label>
+            <select id="appointment-time" required>
+              <option value="" disabled selected>Select time slot</option>
+              <option value="09:00 AM">09:00 AM</option>
+              <option value="09:30 AM">09:30 AM</option>
+              <option value="10:00 AM">10:00 AM</option>
+              <option value="10:30 AM">10:30 AM</option>
+              <option value="11:00 AM">11:00 AM</option>
+              <option value="11:30 AM">11:30 AM</option>
+              <option value="02:00 PM">02:00 PM</option>
+              <option value="02:30 PM">02:30 PM</option>
+              <option value="03:00 PM">03:00 PM</option>
+              <option value="03:30 PM">03:30 PM</option>
+              <option value="04:00 PM">04:00 PM</option>
+              <option value="04:30 PM">04:30 PM</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Real-time conflict warning -->
+        <div id="conflict-warning" style="display: none; background: linear-gradient(135deg, #ffebee, #ffcdd2); border: 2px solid #f44336; border-radius: 12px; padding: 1rem; margin: 1rem 0;">
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.2rem;">❌</span>
+            <strong style="color: #c62828;">Scheduling Conflict Detected!</strong>
+          </div>
+          <p id="conflict-message" style="color: #b71c1c; margin: 0.5rem 0 0; font-size: 0.9rem;"></p>
+        </div>
+
+        <div class="availability-notice">
+          <div class="notice-icon">ℹ️</div>
+          <div class="notice-text">
+            <strong>Clinic Hours:</strong> Monday - Friday, 9:00 AM - 5:00 PM<br>
+            <small>Appointments are available weekdays only. We'll confirm your preferred time based on doctor availability.</small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="symptoms">Reason for Visit / Symptoms</label>
+          <textarea id="symptoms" placeholder="Please describe your symptoms or reason for the visit (optional)" rows="4"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="contact-method">Preferred Contact Method<span>*</span></label>
+          <select id="contact-method" required>
+            <option value="" disabled selected>How should we contact you?</option>
+            <option value="phone">Phone Call</option>
+            <option value="email">Email</option>
+            <option value="text">Text Message</option>
+          </select>
+        </div>
+
+        <button type="button" class="btn-primary" onclick="submitAppointment()" id="submit-btn">Submit Appointment Request</button>
+        
+        <div class="form-actions">
+          <a href="appointment-dashboard.html" class="btn-secondary">Back to My Appointments</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© 2025 GreenLeaf Clinic. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    // Check if user is logged in when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      if (!isLoggedIn()) {
+        alert('Please log in to book an appointment.');
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      // Update user name in greeting
+      updateLoginState();
+      
+      // Initialize date restrictions
+      initializeDateRestrictions();
+      
+      // Check for existing appointments
+      checkExistingAppointments();
+      
+      // Add event listeners for real-time conflict checking
+      setupConflictChecking();
+    });
+
+    function checkExistingAppointments() {
+      const userAppointments = getUserAppointments();
+      const activeAppointments = userAppointments.filter(apt => apt.status !== 'cancelled');
+      
+      if (activeAppointments.length > 0) {
+        document.getElementById('existing-appointments-notice').style.display = 'block';
+      }
+    }
+
+    function setupConflictChecking() {
+      const doctorSelect = document.getElementById('doctor-select');
+      const dateInput = document.getElementById('appointment-date');
+      const timeSelect = document.getElementById('appointment-time');
+      
+      function checkForConflicts() {
+        const doctor = doctorSelect.value;
+        const date = dateInput.value;
+        const time = timeSelect.value;
+        const conflictWarning = document.getElementById('conflict-warning');
+        const conflictMessage = document.getElementById('conflict-message');
+        const submitBtn = document.getElementById('submit-btn');
+        
+        if (doctor && date && time) {
+          // Check for exact conflict (same doctor, date, time)
+          if (hasAppointmentConflict(doctor, date, time)) {
+            const doctorName = doctorSelect.options[doctorSelect.selectedIndex].text;
+            const formattedDate = new Date(date).toLocaleDateString('en-US', { 
+              weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' 
+            });
+            
+            conflictMessage.textContent = `You already have an appointment with ${doctorName} on ${formattedDate} at ${time}. Please choose a different time slot or reschedule your existing appointment.`;
+            conflictWarning.style.display = 'block';
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.5';
+            submitBtn.style.cursor = 'not-allowed';
+          }
+          // Check for time slot conflict (any doctor, same date/time)
+          else if (hasAnyAppointmentConflict(date, time)) {
+            const formattedDate = new Date(date).toLocaleDateString('en-US', { 
+              weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' 
+            });
+            
+            conflictMessage.textContent = `You already have another appointment scheduled on ${formattedDate} at ${time}. Please choose a different time slot.`;
+            conflictWarning.style.display = 'block';
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.5';
+            submitBtn.style.cursor = 'not-allowed';
+          }
+          else {
+            conflictWarning.style.display = 'none';
+            submitBtn.disabled = false;
+            submitBtn.style.opacity = '1';
+            submitBtn.style.cursor = 'pointer';
+          }
+        } else {
+          conflictWarning.style.display = 'none';
+          submitBtn.disabled = false;
+          submitBtn.style.opacity = '1';
+          submitBtn.style.cursor = 'pointer';
+        }
+      }
+      
+      doctorSelect.addEventListener('change', checkForConflicts);
+      dateInput.addEventListener('change', checkForConflicts);
+      timeSelect.addEventListener('change', checkForConflicts);
+    }
+
+    // Enhanced appointment functions (these should be in script.js, but included here for context)
+    function getUserAppointments() {
+      const appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+      const currentUser = getUserName();
+      return appointments.filter(apt => apt.patient === currentUser);
+    }
+
+    function hasAppointmentConflict(doctor, date, time, excludeId = null) {
+      const appointments = getUserAppointments();
+      return appointments.some(apt => 
+        apt.id !== excludeId && 
+        apt.status !== 'cancelled' &&
+        apt.doctor === doctor &&
+        apt.date === date && 
+        apt.time === time
+      );
+    }
+
+    function hasAnyAppointmentConflict(date, time, excludeId = null) {
+      const appointments = getUserAppointments();
+      return appointments.some(apt => 
+        apt.id !== excludeId && 
+        apt.status !== 'cancelled' &&
+        apt.date === date && 
+        apt.time === time
+      );
+    }
+  </script>
+</body>
+</html>

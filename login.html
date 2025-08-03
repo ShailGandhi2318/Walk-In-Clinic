@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - GreenLeaf Clinic</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .dashboard-section {
+      background: url('images/backgrounds/clinic_bg.jpg') center/cover no-repeat;
+      min-height: 85vh;
+      padding: 3rem 1rem;
+    }
+
+    .dashboard-container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(15px);
+      padding: 3rem;
+      border-radius: 25px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+      opacity: 0;
+      animation: fadeInUp 0.8s ease-out forwards;
+      border: 1px solid rgba(76, 175, 80, 0.2);
+    }
+
+    .login-container {
+      max-width: 500px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      padding: 2.5rem;
+      border-radius: 20px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+      opacity: 0;
+      animation: fadeInUp 0.7s ease-out forwards;
+    }
+
+    .login-container h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2.2rem;
+      color: #2a6f54;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.3rem;
+      align-items: stretch;
+    }
+
+    .login-form label {
+      font-size: 1.1rem;
+      color: #2a3d3f;
+      font-weight: 700;
+      text-shadow: 0 1px 1px rgba(0,0,0,0.05);
+      margin-bottom: 0.4rem;
+      display: block;
+    }
+
+    .login-form label span {
+      color: #d32f2f;
+      font-size: 1.2rem;
+      margin-left: 0.3rem;
+    }
+
+    .login-form input, .login-form select {
+      width: 100%;
+      padding: 0.9rem 1.2rem;
+      border: 2px solid #4caf50;
+      border-radius: 30px;
+      font-size: 1rem;
+      font-family: inherit;
+      background-color: #ffffff;
+      transition: transform 0.2s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .login-form input:focus, .login-form select:focus {
+      outline: none;
+      border-color: #388e3c;
+      box-shadow: 0 0 8px #4caf5088;
+      transform: scale(1.02);
+    }
+
+    .login-form input:hover, .login-form select:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 6px #4caf5044;
+    }
+
+    .login-form button {
+      max-width: 200px;
+      margin: 1.2rem auto 0;
+      padding: 0.9rem 2rem;
+      transition: transform 0.2s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .login-form button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 15px #4caf5066;
+    }
+
+    .register-link {
+      text-align: center;
+      font-size: 1rem;
+      color: #2a3d3f;
+      margin-top: 1rem;
+    }
+
+    .register-link a {
+      color: #4caf50;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .register-link a:hover {
+      color: #388e3c;
+    }
+
+    .step-indicator {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+      gap: 1rem;
+    }
+
+    .step {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.9rem;
+      border: 2px solid #e0e0e0;
+      color: #999;
+      transition: all 0.3s ease;
+    }
+
+    .step.active {
+      background: #4caf50;
+      border-color: #4caf50;
+      color: white;
+    }
+
+    .step.completed {
+      background: #2e7d32;
+      border-color: #2e7d32;
+      color: white;
+    }
+
+    .step-divider {
+      width: 30px;
+      height: 2px;
+      background: #e0e0e0;
+      margin-top: 14px;
+    }
+
+    .step-divider.completed {
+      background: #4caf50;
+    }
+
+    .login-step {
+      display: none;
+    }
+
+    .login-step.active {
+      display: block;
+    }
+
+    .info-box {
+      background: linear-gradient(135deg, #e8f5e8, #f1f8f1);
+      padding: 1rem;
+      border-radius: 10px;
+      border-left: 4px solid #4caf50;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      color: #2a6f54;
+    }
+
+    .security-questions {
+      display: none;
+      gap: 1rem;
+    }
+
+    .security-questions.show {
+      display: flex;
+      flex-direction: column;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="logo">GreenLeaf Clinic</div>
+      <nav class="nav">
+        <div class="nav-links">
+          <a href="index.html#about">About</a>
+          <a href="index.html#services">Services</a>
+          <a href="index.html#doctors">Doctors</a>
+          <a href="index.html#contact">Contact</a>
+        </div>
+        <div class="nav-login">
+          <a href="login.html" class="login-icon" title="Login/Sign Up"><span>👤</span> Login/Sign Up</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <section class="login-section">
+    <div class="login-container">
+      <h2>Login to Your Account</h2>
+      
+      <!-- Step Indicator -->
+      <div class="step-indicator">
+        <div class="step active" id="step1">1</div>
+        <div class="step-divider" id="divider1"></div>
+        <div class="step" id="step2">2</div>
+        <div class="step-divider" id="divider2"></div>
+        <div class="step" id="step3">3</div>
+      </div>
+      
+      <!-- Step 1: Phone Number Entry -->
+      <div class="login-step active" id="phone-step">
+        <div class="info-box">
+          📱 Enter your registered phone number to receive an OTP for secure login
+        </div>
+        
+        <div class="login-form">
+          <label for="phone-number">Phone Number<span>*</span></label>
+          <input type="tel" id="phone-number" placeholder="1234567890" maxlength="10" required>
+          <button class="btn-primary" onclick="sendLoginOTP()">Send OTP</button>
+        </div>
+      </div>
+      
+      <!-- Step 2: OTP Verification -->
+      <div class="login-step" id="otp-step">
+        <div class="info-box">
+          🔐 Enter the 6-digit OTP sent to your phone number: <strong id="masked-phone"></strong>
+        </div>
+        
+        <div class="login-form">
+          <label for="login-otp">Enter 6-Digit OTP<span>*</span></label>
+          <input type="text" id="login-otp" placeholder="000000" maxlength="6" required style="text-align: center; letter-spacing: 3px; font-size: 1.3rem; font-weight: 600;">
+          
+          <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1rem; flex-wrap: wrap;">
+            <button class="btn-primary" onclick="verifyLoginOTP()">Verify & Login</button>
+            <button class="btn-secondary" onclick="resendLoginOTP()" style="background: #ff9800; color: white; border: none;">Resend OTP</button>
+          </div>
+          
+          <p style="text-align: center; font-size: 0.85rem; color: #666; margin-top: 1rem;">
+            OTP expires in <span id="login-timer" style="font-weight: 600; color: #e53935;">5:00</span>
+          </p>
+          
+          <p style="text-align: center; margin-top: 1rem;">
+            <a href="#" onclick="goBackToPhone()" style="color: #4caf50; text-decoration: none; font-size: 0.9rem;">← Back to phone number</a>
+          </p>
+        </div>
+      </div>
+      
+      <!-- Step 3: Security Questions (if needed) -->
+      <div class="login-step" id="security-step">
+        <div class="info-box">
+          🛡️ For additional security, please answer your security questions
+        </div>
+        
+        <div class="login-form">
+          <div class="security-questions">
+            <div>
+              <label id="security-q1-label">Security Question 1</label>
+              <input type="text" id="security-a1" placeholder="Your answer" required>
+            </div>
+            
+            <div>
+              <label id="security-q2-label">Security Question 2</label>
+              <input type="text" id="security-a2" placeholder="Your answer" required>
+            </div>
+          </div>
+          
+          <button class="btn-primary" onclick="verifySecurityQuestions()">Complete Login</button>
+          
+          <p style="text-align: center; margin-top: 1rem;">
+            <a href="#" onclick="goBackToOTP()" style="color: #4caf50; text-decoration: none; font-size: 0.9rem;">← Back to OTP</a>
+          </p>
+        </div>
+      </div>
+      
+      <div class="register-link">
+        Don't have an account? <a href="register.html">Create Account</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© 2025 GreenLeaf Clinic. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    let currentUser = null;
+    let generatedLoginOTP = null;
+    let loginTimer = null;
+    let currentPhoneNumber = null;
+
+    // Check if already logged in
+    document.addEventListener('DOMContentLoaded', function() {
+      if (isLoggedIn()) {
+        window.location.href = 'appointment-dashboard.html';
+        return;
+      }
+    });
+
+    function sendLoginOTP() {
+      const phoneNumber = document.getElementById('phone-number').value.trim();
+      
+      // Validate phone number
+      if (!phoneNumber || phoneNumber.length !== 10 || !/^\d{10}$/.test(phoneNumber)) {
+        alert('Please enter a valid 10-digit phone number.');
+        return;
+      }
+
+      // Check if user exists
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      const user = users.find(u => u.contact === phoneNumber);
+      
+      if (!user) {
+        alert('No account found with this phone number. Please register first or check your phone number.');
+        return;
+      }
+
+      // Store current user and phone number
+      currentUser = user;
+      currentPhoneNumber = phoneNumber;
+      
+      // Generate OTP
+      generatedLoginOTP = Math.floor(100000 + Math.random() * 900000).toString();
+      
+      // Update UI
+      const maskedPhone = maskPhoneNumber(phoneNumber);
+      document.getElementById('masked-phone').textContent = maskedPhone;
+      
+      // Move to step 2
+      goToStep(2);
+      
+      // Start timer
+      startLoginTimer();
+      
+      // Simulate sending OTP
+      console.log(`Login OTP sent to ${phoneNumber}: ${generatedLoginOTP}`);
+      alert(`OTP sent to your phone!\n\nFor demo purposes, your OTP is: ${generatedLoginOTP}\n(In production, this would be sent via SMS)`);
+    }
+
+    function verifyLoginOTP() {
+      const enteredOTP = document.getElementById('login-otp').value.trim();
+      
+      if (!enteredOTP) {
+        alert('Please enter the OTP.');
+        return;
+      }
+
+      if (!generatedLoginOTP) {
+        alert('OTP has expired. Please request a new one.');
+        return;
+      }
+
+      if (enteredOTP === generatedLoginOTP) {
+        // OTP verified - check if security questions are needed
+        if (needsSecurityQuestions()) {
+          setupSecurityQuestions();
+          goToStep(3);
+        } else {
+          completeLogin();
+        }
+      } else {
+        alert('Invalid OTP. Please check and try again.');
+        document.getElementById('login-otp').value = '';
+      }
+    }
+
+    function needsSecurityQuestions() {
+      // For demo, let's require security questions for enhanced security
+      // In real implementation, this might be based on user settings or risk assessment
+      return true;
+    }
+
+    function setupSecurityQuestions() {
+      if (!currentUser) return;
+      
+      const securityQuestions = document.querySelector('.security-questions');
+      const q1Label = document.getElementById('security-q1-label');
+      const q2Label = document.getElementById('security-q2-label');
+      
+      q1Label.textContent = getSecurityQuestionText(currentUser.securityQuestion1);
+      q2Label.textContent = getSecurityQuestionText(currentUser.securityQuestion2);
+      
+      securityQuestions.classList.add('show');
+    }
+
+    function getSecurityQuestionText(questionKey) {
+      const questions = {
+        'mother-maiden': 'What is your mother\'s maiden name?',
+        'first-pet': 'What was the name of your first pet?',
+        'childhood-street': 'What street did you grow up on?',
+        'favorite-teacher': 'What was your favorite teacher\'s name?',
+        'first-school': 'What was the name of your first school?',
+        'birth-city': 'In what city were you born?',
+        'first-job': 'What was your first job?',
+        'favorite-book': 'What is your favorite book?',
+        'childhood-friend': 'What was your childhood best friend\'s name?',
+        'favorite-food': 'What is your favorite food?'
+      };
+      return questions[questionKey] || questionKey;
+    }
+
+    function verifySecurityQuestions() {
+      const answer1 = document.getElementById('security-a1').value.trim();
+      const answer2 = document.getElementById('security-a2').value.trim();
+      
+      if (!answer1 || !answer2) {
+        alert('Please answer both security questions.');
+        return;
+      }
+
+      if (!currentUser) {
+        alert('Session expired. Please start over.');
+        resetLogin();
+        return;
+      }
+
+      // Verify answers (case-insensitive)
+      const correctAnswer1 = currentUser.securityAnswer1.toLowerCase();
+      const correctAnswer2 = currentUser.securityAnswer2.toLowerCase();
+      
+      if (answer1.toLowerCase() === correctAnswer1 && answer2.toLowerCase() === correctAnswer2) {
+        completeLogin();
+      } else {
+        alert('Security question answers are incorrect. Please try again.');
+        document.getElementById('security-a1').value = '';
+        document.getElementById('security-a2').value = '';
+      }
+    }
+
+    function completeLogin() {
+      if (!currentUser) return;
+      
+      // Clear timers and OTP data
+      clearInterval(loginTimer);
+      generatedLoginOTP = null;
+      
+      // Set login state
+      setLoginState(currentUser.fullName);
+      
+      // Show success message
+      alert(`Welcome back, ${currentUser.fullName}!\n\nYou have successfully logged in to your GreenLeaf Clinic account.`);
+      
+      // Redirect to intended page or dashboard
+      const redirectTo = sessionStorage.getItem('redirectAfterLogin') || 'appointment-dashboard.html';
+      sessionStorage.removeItem('redirectAfterLogin');
+      window.location.href = redirectTo;
+    }
+
+    function resendLoginOTP() {
+      if (!currentPhoneNumber) {
+        alert('Please start over by entering your phone number.');
+        resetLogin();
+        return;
+      }
+      
+      clearInterval(loginTimer);
+      sendLoginOTP();
+      document.getElementById('login-otp').value = '';
+    }
+
+    function startLoginTimer() {
+      let timeLeft = 300; // 5 minutes
+      const timerElement = document.getElementById('login-timer');
+      
+      loginTimer = setInterval(() => {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        
+        if (timeLeft <= 0) {
+          clearInterval(loginTimer);
+          timerElement.textContent = 'Expired';
+          generatedLoginOTP = null;
+          alert('OTP has expired. Please request a new one.');
+        }
+        timeLeft--;
+      }, 1000);
+    }
+
+    function goToStep(stepNumber) {
+      // Hide all steps
+      document.querySelectorAll('.login-step').forEach(step => {
+        step.classList.remove('active');
+      });
+      
+      // Show target step
+      const targetStep = document.getElementById(stepNumber === 1 ? 'phone-step' : 
+                                               stepNumber === 2 ? 'otp-step' : 'security-step');
+      targetStep.classList.add('active');
+      
+      // Update step indicators
+      for (let i = 1; i <= 3; i++) {
+        const step = document.getElementById(`step${i}`);
+        const divider = document.getElementById(`divider${i}`);
+        
+        if (i < stepNumber) {
+          step.classList.add('completed');
+          step.classList.remove('active');
+          if (divider) divider.classList.add('completed');
+        } else if (i === stepNumber) {
+          step.classList.add('active');
+          step.classList.remove('completed');
+        } else {
+          step.classList.remove('active', 'completed');
+          if (divider) divider.classList.remove('completed');
+        }
+      }
+    }
+
+    function goBackToPhone() {
+      resetLogin();
+      goToStep(1);
+    }
+
+    function goBackToOTP() {
+      document.getElementById('security-a1').value = '';
+      document.getElementById('security-a2').value = '';
+      goToStep(2);
+    }
+
+    function resetLogin() {
+      clearInterval(loginTimer);
+      generatedLoginOTP = null;
+      currentUser = null;
+      currentPhoneNumber = null;
+      
+      document.getElementById('phone-number').value = '';
+      document.getElementById('login-otp').value = '';
+      document.getElementById('security-a1').value = '';
+      document.getElementById('security-a2').value = '';
+      
+      goToStep(1);
+    }
+
+    function maskPhoneNumber(phoneNumber) {
+      return phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/, '($1) ***-$4');
+    }
+
+    // Allow Enter key navigation
+    document.getElementById('phone-number').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        sendLoginOTP();
+      }
+    });
+
+    document.getElementById('login-otp').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        verifyLoginOTP();
+      }
+    });
+
+    document.getElementById('security-a2').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        verifySecurityQuestions();
+      }
+    });
+  </script>
+</body>
+</html>

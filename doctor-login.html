@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctor Portal Login - GreenLeaf Clinic</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #2a6f54, #4caf50);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .login-container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(15px);
+      padding: 3rem;
+      border-radius: 25px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+      max-width: 450px;
+      width: 100%;
+      text-align: center;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    .clinic-logo {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2rem;
+      color: #2a6f54;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    .portal-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.8rem;
+      color: #2a6f54;
+      margin-bottom: 0.5rem;
+    }
+
+    .portal-subtitle {
+      color: #666;
+      margin-bottom: 2rem;
+      font-style: italic;
+    }
+
+    .doctor-selection {
+      margin-bottom: 2rem;
+    }
+
+    .doctor-cards {
+      display: grid;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .doctor-card {
+      background: linear-gradient(135deg, #f8fff8, #e8f5e8);
+      border: 2px solid #e0e0e0;
+      border-radius: 15px;
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .doctor-card:hover {
+      border-color: #4caf50;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(76, 175, 80, 0.2);
+    }
+
+    .doctor-card.selected {
+      border-color: #4caf50;
+      background: linear-gradient(135deg, #e8f5e8, #c8e6c8);
+      box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+    }
+
+    .doctor-avatar {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .doctor-name {
+      font-weight: 700;
+      color: #2a6f54;
+      font-size: 1.1rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .doctor-specialty {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .selected-indicator {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #4caf50;
+      color: white;
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+    }
+
+    .doctor-card.selected .selected-indicator {
+      display: flex;
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      color: #2a6f54;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 1rem 1.3rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #4caf50;
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+    }
+
+    .login-btn {
+      background: linear-gradient(135deg, #4caf50, #388e3c);
+      color: white;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 25px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+    }
+
+    .login-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+    }
+
+    .login-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .demo-credentials {
+      background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+      border: 1px solid #ff9800;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    .demo-title {
+      font-weight: 600;
+      color: #e65100;
+      margin-bottom: 0.5rem;
+    }
+
+    .demo-item {
+      margin: 0.3rem 0;
+      color: #bf360c;
+    }
+
+    .back-link {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .back-link a {
+      color: #4caf50;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .back-link a:hover {
+      color: #388e3c;
+    }
+
+    .security-info {
+      background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+      border: 1px solid #2196f3;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: #1565c0;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .login-container {
+        padding: 2rem 1.5rem;
+        margin: 1rem;
+      }
+      
+      .portal-title {
+        font-size: 1.5rem;
+      }
+      
+      .doctor-avatar {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="clinic-logo">🏥 GreenLeaf Clinic</div>
+    <h2 class="portal-title">Doctor Portal</h2>
+    <p class="portal-subtitle">Access your appointment calendar and manage patient schedules</p>
+    
+    <div class="doctor-selection">
+      <h3 style="color: #2a6f54; margin-bottom: 1rem; font-size: 1.1rem;">Select Your Profile</h3>
+      <div class="doctor-cards">
+        <div class="doctor-card" data-doctor="dr-jane-smith" onclick="selectDoctor(this)">
+          <div class="selected-indicator">✓</div>
+          <div class="doctor-avatar">👩‍⚕️</div>
+          <div class="doctor-name">Dr. Jane Smith</div>
+          <div class="doctor-specialty">General Practitioner</div>
+        </div>
+        
+        <div class="doctor-card" data-doctor="dr-michael-lee" onclick="selectDoctor(this)">
+          <div class="selected-indicator">✓</div>
+          <div class="doctor-avatar">👨‍⚕️</div>
+          <div class="doctor-name">Dr. Michael Lee</div>
+          <div class="doctor-specialty">Family Medicine</div>
+        </div>
+        
+        <div class="doctor-card" data-doctor="dr-sarah-khan" onclick="selectDoctor(this)">
+          <div class="selected-indicator">✓</div>
+          <div class="doctor-avatar">👩‍⚕️</div>
+          <div class="doctor-name">Dr. Sarah Khan</div>
+          <div class="doctor-specialty">Pediatrician</div>
+        </div>
+      </div>
+    </div>
+
+    <form class="login-form" onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label for="doctor-id">Doctor ID</label>
+        <input type="text" id="doctor-id" placeholder="Enter your doctor ID" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter your password" required>
+      </div>
+      
+      <button type="submit" class="login-btn" id="login-btn" disabled>
+        Access Calendar Portal
+      </button>
+    </form>
+
+    <div class="demo-credentials">
+      <div class="demo-title">🚀 Demo Credentials</div>
+      <div class="demo-item"><strong>Dr. Jane Smith:</strong> ID: jane.smith | Password: doctor123</div>
+      <div class="demo-item"><strong>Dr. Michael Lee:</strong> ID: michael.lee | Password: doctor123</div>
+      <div class="demo-item"><strong>Dr. Sarah Khan:</strong> ID: sarah.khan | Password: doctor123</div>
+    </div>
+
+    <div class="security-info">
+      🔒 Your login session is secure and encrypted. Calendar data syncs with Google Calendar API for seamless scheduling.
+    </div>
+
+    <div class="back-link">
+      <a href="index.html">← Back to Main Site</a>
+    </div>
+  </div>
+
+  <script>
+    let selectedDoctorId = null;
+
+    // Doctor credentials (in production, this would be handled by a secure backend)
+    const doctorCredentials = {
+      'dr-jane-smith': { id: 'jane.smith', password: 'doctor123', name: 'Dr. Jane Smith' },
+      'dr-michael-lee': { id: 'michael.lee', password: 'doctor123', name: 'Dr. Michael Lee' },
+      'dr-sarah-khan': { id: 'sarah.khan', password: 'doctor123', name: 'Dr. Sarah Khan' }
+    };
+
+    function selectDoctor(cardElement) {
+      // Remove selection from all cards
+      document.querySelectorAll('.doctor-card').forEach(card => {
+        card.classList.remove('selected');
+      });
+      
+      // Select the clicked card
+      cardElement.classList.add('selected');
+      selectedDoctorId = cardElement.dataset.doctor;
+      
+      // Auto-fill the doctor ID field
+      const doctor = doctorCredentials[selectedDoctorId];
+      if (doctor) {
+        document.getElementById('doctor-id').value = doctor.id;
+        updateLoginButton();
+      }
+    }
+
+    function updateLoginButton() {
+      const doctorId = document.getElementById('doctor-id').value;
+      const password = document.getElementById('password').value;
+      const loginBtn = document.getElementById('login-btn');
+      
+      if (doctorId && password && selectedDoctorId) {
+        loginBtn.disabled = false;
+      } else {
+        loginBtn.disabled = true;
+      }
+    }
+
+    function handleLogin(event) {
+      event.preventDefault();
+      
+      const doctorId = document.getElementById('doctor-id').value.trim();
+      const password = document.getElementById('password').value.trim();
+      
+      if (!selectedDoctorId) {
+        alert('Please select a doctor profile first.');
+        return;
+      }
+      
+      const doctor = doctorCredentials[selectedDoctorId];
+      
+      if (!doctor) {
+        alert('Invalid doctor selection.');
+        return;
+      }
+      
+      // Validate credentials
+      if (doctorId === doctor.id && password === doctor.password) {
+        // Successful login
+        showLoginSuccess(doctor.name);
+        
+        // Redirect to calendar portal with doctor parameter
+        setTimeout(() => {
+          window.location.href = `doctor-calendar.html?doctor=${selectedDoctorId}`;
+        }, 2000);
+      } else {
+        alert('Invalid credentials. Please check your Doctor ID and password.');
+        document.getElementById('password').value = '';
+      }
+    }
+
+    function showLoginSuccess(doctorName) {
+      const loginBtn = document.getElementById('login-btn');
+      loginBtn.innerHTML = '✓ Login Successful! Redirecting...';
+      loginBtn.style.background = '#4caf50';
+      loginBtn.disabled = true;
+      
+      // Show success message
+      const container = document.querySelector('.login-container');
+      const successMessage = document.createElement('div');
+      successMessage.style.cssText = `
+        background: linear-gradient(135deg, #c8e6c8, #a5d6a5);
+        border: 2px solid #4caf50;
+        border-radius: 12px;
+        padding: 1rem;
+        margin-top: 1rem;
+        color: #2e7d32;
+        font-weight: 600;
+        text-align: center;
+      `;
+      successMessage.innerHTML = `
+        🎉 Welcome, ${doctorName}!<br>
+        <small style="font-weight: normal; opacity: 0.8;">Loading your calendar portal...</small>
+      `;
+      container.appendChild(successMessage);
+    }
+
+    // Add event listeners for real-time validation
+    document.getElementById('doctor-id').addEventListener('input', updateLoginButton);
+    document.getElementById('password').addEventListener('input', updateLoginButton);
+
+    // Auto-select first doctor for demo purposes
+    document.addEventListener('DOMContentLoaded', function() {
+      const firstCard = document.querySelector('.doctor-card');
+      if (firstCard) {
+        selectDoctor(firstCard);
+      }
+    });
+
+    // Handle Enter key submission
+    document.getElementById('password').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter' && !document.getElementById('login-btn').disabled) {
+        handleLogin(e);
+      }
+    });
+
+    // Handle doctor ID field changes to auto-select corresponding doctor
+    document.getElementById('doctor-id').addEventListener('input', function(e) {
+      const enteredId = e.target.value.trim();
+      
+      // Find matching doctor
+      for (const [doctorKey, doctor] of Object.entries(doctorCredentials)) {
+        if (doctor.id === enteredId) {
+          const card = document.querySelector(`[data-doctor="${doctorKey}"]`);
+          if (card) {
+            selectDoctor(card);
+          }
+          break;
+        }
+      }
+    });
+  </script>
+</body>
+</html>
