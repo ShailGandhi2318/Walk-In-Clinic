@@ -1,0 +1,1 @@
+flask\npsycopg2-binary\npython-dotenv
