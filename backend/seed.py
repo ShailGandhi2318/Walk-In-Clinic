@@ -1,1 +1,0 @@
-# optional: seed database script
